@@ -5,11 +5,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const schema = yup.object({
-  name: yup.string().required("Name is required").min(2, "Name must be at least 2 characters"),
-  email: yup.string().required("Email is required").email("Invalid email address"),
-  phone: yup.string().required("Phone is required").min(8, "Phone must be at least 8 characters"),
-  company: yup.string(),
-  message: yup.string(),
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(2, "Name must be at least 2 characters"),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email address"),
+  phone: yup
+    .string()
+    .required("Phone is required")
+    .min(8, "Phone must be at least 8 characters"),
+  message: yup.string().required("message is required"),
 });
 
 type FormValues = yup.InferType<typeof schema>;
@@ -26,7 +34,11 @@ const inputClass =
   "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-500 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-800/50 dark:text-white dark:placeholder-gray-500";
 const inputErrorClass = "border-red-500 dark:border-red-500";
 
-export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFormProps) {
+export function PurchaseForm({
+  productName,
+  productSlug,
+  onSuccess,
+}: PurchaseFormProps) {
   const {
     register,
     handleSubmit,
@@ -34,11 +46,13 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
     reset,
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
-    defaultValues: { name: "", email: "", phone: "", company: "", message: "" },
+    defaultValues: { name: "", email: "", phone: "", message: "" },
   });
 
   const onSubmit = (data: FormValues) => {
-    const subject = encodeURIComponent(`[Purchase Request] ${productName} - ${data.name}`);
+    const subject = encodeURIComponent(
+      `[Purchase Request] ${productName} - ${data.name}`,
+    );
     const bodyLines = [
       `New purchase request from RoboCollective.ai`,
       ``,
@@ -46,7 +60,6 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
       `Name: ${data.name}`,
       `Email: ${data.email}`,
       `Phone: ${data.phone}`,
-      `Company: ${data.company || "—"}`,
       ``,
       `Product:`,
       `Name: ${productName}`,
@@ -65,7 +78,9 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="name"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Full Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -74,11 +89,15 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
           className={`${inputClass} ${errors.name ? inputErrorClass : ""}`}
           placeholder="John Doe"
         />
-        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Email <span className="text-red-500">*</span>
         </label>
         <input
@@ -88,11 +107,15 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
           className={`${inputClass} ${errors.email ? inputErrorClass : ""}`}
           placeholder="john@example.com"
         />
-        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="phone" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="phone"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Phone <span className="text-red-500">*</span>
         </label>
         <input
@@ -102,18 +125,15 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
           className={`${inputClass} ${errors.phone ? inputErrorClass : ""}`}
           placeholder="+1 234 567 8900"
         />
-        {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
+        {errors.phone && (
+          <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="company" className="mb-1 block text-sm font-medium text-theme-heading">
-          Company (optional)
-        </label>
-        <input id="company" {...register("company")} className={inputClass} placeholder="Your company name" />
-      </div>
-
-      <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="message"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Message (optional)
         </label>
         <textarea
@@ -126,13 +146,13 @@ export function PurchaseForm({ productName, productSlug, onSuccess }: PurchaseFo
       </div>
 
       <p className="text-sm text-theme-body">
-        Click Confirm to open your email app. Your message will be sent to mohamedrad2022@gmail.com.
+        Click Confirm to open your email app. Your message will be sent to
+        mohamedrad2022@gmail.com.
       </p>
 
       <button
         type="submit"
-        className="w-full rounded-lg bg-green-700 px-6 py-3 font-semibold text-white transition hover:bg-green-800"
-      >
+        className="w-full rounded-lg bg-green-700 px-6 py-3 font-semibold text-white transition hover:bg-green-800">
         Confirm Purchase Request
       </button>
     </form>

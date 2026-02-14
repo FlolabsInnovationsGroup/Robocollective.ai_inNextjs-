@@ -6,11 +6,18 @@ import * as yup from "yup";
 import { Tooltip } from "@/components/Tooltip";
 
 const schema = yup.object({
-  name: yup.string().required("Name is required").min(2, "Name must be at least 2 characters"),
-  email: yup.string().required("Email is required").email("Invalid email address"),
-  message: yup.string().required("Message is required").min(10, "Message must be at least 10 characters"),
-  company: yup.string(),
-  role: yup.string(),
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(2, "Name must be at least 2 characters"),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email address"),
+  message: yup
+    .string()
+    .required("Message is required")
+    .min(10, "Message must be at least 10 characters"),
 });
 
 type FormValues = yup.InferType<typeof schema>;
@@ -29,19 +36,18 @@ export function ContactForm() {
     reset,
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
-    defaultValues: { name: "", email: "", message: "", company: "", role: "" },
+    defaultValues: { name: "", email: "", message: "" },
   });
 
   const onSubmit = (data: FormValues) => {
-    const subject = encodeURIComponent(`[Contact] ${data.name} - RoboCollective.ai`);
+    const subject = encodeURIComponent(
+      `[Contact] ${data.name} - RoboCollective.ai`,
+    );
     const bodyLines = [
       `New contact form submission`,
       ``,
       `Name: ${data.name}`,
       `Email: ${data.email}`,
-      `Company: ${data.company || "—"}`,
-      `Role: ${data.role || "—"}`,
-      ``,
       `Message:`,
       data.message,
     ];
@@ -54,7 +60,9 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="name"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -63,11 +71,15 @@ export function ContactForm() {
           className={`${inputClass} ${errors.name ? inputErrorClass : ""}`}
           placeholder="John Doe"
         />
-        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Email <span className="text-red-500">*</span>
         </label>
         <input
@@ -77,33 +89,15 @@ export function ContactForm() {
           className={`${inputClass} ${errors.email ? inputErrorClass : ""}`}
           placeholder="john@example.com"
         />
-        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="company" className="mb-1 block text-sm font-medium text-theme-heading">
-          Company (optional)
-        </label>
-        <Tooltip content="Your company or organization name">
-          <span className="inline-block w-full">
-            <input id="company" {...register("company")} className={inputClass} placeholder="Your company" />
-          </span>
-        </Tooltip>
-      </div>
-
-      <div>
-        <label htmlFor="role" className="mb-1 block text-sm font-medium text-theme-heading">
-          Role (optional)
-        </label>
-        <Tooltip content="Your job title or role">
-          <span className="inline-block w-full">
-            <input id="role" {...register("role")} className={inputClass} placeholder="e.g. Engineer, Researcher" />
-          </span>
-        </Tooltip>
-      </div>
-
-      <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-medium text-theme-heading">
+        <label
+          htmlFor="message"
+          className="mb-1 block text-sm font-medium text-theme-heading">
           Message <span className="text-red-500">*</span>
         </label>
         <textarea
@@ -113,17 +107,19 @@ export function ContactForm() {
           className={`${inputClass} ${errors.message ? inputErrorClass : ""}`}
           placeholder="How can we help?"
         />
-        {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>}
+        {errors.message && (
+          <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>
+        )}
       </div>
 
       <p className="text-sm text-theme-body">
-        Click Send to open your email app. Your message will be sent to mohamedrad2022@gmail.com.
+        Click Send to open your email app. Your message will be sent to
+        mohamedrad2022@gmail.com.
       </p>
 
       <button
         type="submit"
-        className="w-full rounded-lg bg-green-700 px-6 py-3 font-semibold text-white transition hover:bg-green-800"
-      >
+        className="w-full rounded-lg bg-green-700 px-6 py-3 font-semibold text-white transition hover:bg-green-800">
         Send Message
       </button>
     </form>
