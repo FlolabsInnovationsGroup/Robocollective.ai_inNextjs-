@@ -20,19 +20,7 @@ A Next.js e-commerce site for robotics products, built with TypeScript, Tailwind
 npm install
 ````
 
-### 2. Copy assets
-
-Copy the `assets` folder from the project root into `public/` so that static files are available:
-
-```bash
-# Windows (PowerShell)
-Copy-Item -Path assets -Destination public\assets -Recurse -Force
-
-# macOS/Linux
-cp -r assets public/
-```
-
-### 3. Run development server
+### 2. Run development server
 
 ```bash
 npm run dev
